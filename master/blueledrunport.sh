@@ -3,29 +3,33 @@
 # note: only pass the device name and not the /dev directory
 # Typically called from startall
 # It kills any previously running instance on that device
-# Note that it seems like I should be using /var for all this stuff, but then this file would not 
+# Note that it seems like I should be using /var for all this stuff, but then this file would not
 # work when run by non-root
 
 if [ -e /tmp/blueled/$1/pid ]; then
   echo killing $(cat /tmp/blueled/$1/pid)
   kill $(cat /tmp/blueled/$1/pid)
-fi 
+fi
 
 if [ ! -e /tmp/blueled ]; then
     mkdir /tmp/blueled
 fi
 
 if [ ! -e /tmp/blueled/font.txt ]; then
-    cp /etc/blueled/defaultfont.txt /tmp/blueled/font.txt    
+    cp /etc/blueled/defaultfont.txt /tmp/blueled/font.txt
 fi
 
 if [ ! -e /tmp/blueled/$1 ]; then
     mkdir /tmp/blueled/$1
 fi
 
-
+# Old message set up.
+#if [ ! -e /tmp/blueled/$1/message.txt ]; then
+#    cp /etc/blueled/defaultmessage.txt /tmp/blueled/$1/message.txt
+#fi
+# New message set up.
 if [ ! -e /tmp/blueled/$1/message.txt ]; then
-    cp /etc/blueled/defaultmessage.txt /tmp/blueled/$1/message.txt
+    cp /etc/blueled/messages/$1/message.txt /tmp/blueled/$1/message.txt
 fi
 
 

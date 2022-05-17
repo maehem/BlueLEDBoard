@@ -1,0 +1,6 @@
+[Unit]
+Description=Grab new messages files from usb stick
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/checkusbstick.sh
