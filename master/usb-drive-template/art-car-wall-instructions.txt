@@ -1,0 +1,91 @@
+Art Car Wall Instructions
+
+The USB thumb drive needs to be set up a certain way for the signs
+to properly display the messages.
+
+At a minimum, your thumb drive should contain a folder called 'messages'.
+In that folder are the message files. They are named after the Serial
+ports attached to the individual LED sign strips that the Raspberry Pi sees.
+There are six LED strips total.   They are named (ttyUSB0, ttyUSB1, ttyUSB3,
+ttyUSB4, ttyUSB5 and ttyUSB7).  Notice gaps in the numbering, that's just
+how it is.
+
+In your 'messages' folder, a message file is named ttyUSB0.txt (and so forth
+as pointed out in the paragraph above).
+
+Example:
+--------
+My-USB-Drive
+    |
+    -  'messages'
+    .   |
+    .   |--->  ttyUSB0.txt
+    .   |--->  ttyUSB1.txt
+    .   |--->  ttyUSB3.txt
+    .   |--->  ttyUSB4.txt
+    .   |--->  ttyUSB5.txt
+    .   \--->  ttyUSB7.txt
+    .
+    -  'special-gig-2022-06-06'  (You can back up older messges like this).
+    .   |
+    .   |--->  ttyUSB0.txt
+    .   |--->  ttyUSB1.txt
+    .   |--->  ttyUSB3.txt
+    .   |--->  ttyUSB4.txt
+    .   |--->  ttyUSB5.txt
+    .   \--->  ttyUSB7.txt
+
+    NOTE: The sign system will only ever read files from 'messages' folder
+          and those files must be named as described above or they won't load.
+
+    You can back up or pre-prepare files by copying the 'messages' folder
+    and editing the ttyUSB*.txt files as needed.  To make one of those other
+    folders active, you would first rename/copy the 'messages' folder to
+    something descriptive  (like 'messages-backup-2022-06-06') and then
+    copy/rename the scratch folder for your gig/event to 'messages'.
+
+
+    The ttyUSB*.txt file usually contains text, but you can cause the text to
+    have some effects with the sub-commands shown below.  The main one you
+    will want to use is the speed related one to slow the sign down.  The
+    default sign speed is a little fast for viewing and photographing.
+
+
+    ###Commands
+
+    The message file can have embedded commands that insert dynamically generated text into the  message at the location of the command, or alter the display of chars following the command in the message.
+
+    Every command consists of a `*`followed by a command specified. The command specified indicates which command you want to execute. Some commands also have a value that follows the letter.
+
+    Command | Description
+    ------- | -----------
+    `**`    | Escape `*`. Just inserts a single `*` at the current location.
+    `*Ln`   | Lag. Slow the sign down a little.  n=0-9.  Try 2 (i.e.  *L2 )
+    `*Xx`   | Insert the ASCII char `x` where `x` is a 2 digit hex number. 
+            | This is particularly useful for extended codes above 80 that
+            | are hard to consistently type on different editors. `*X3F`
+            | inserts a `?` at the current location because Ascii code hex
+            | 3F is a question mark.
+    `*On`   | Moves the carriage back `n` pixels to overstrike next char- just
+            | like a typewriter. `X*O6-` would generate an ugly looking `*`
+            | because it would first print the `X` and then move back 6 pixels
+            | (5 for the char width and 1 of padding) and then print an `-`
+            | over the `X`.
+    `*Sn`   | Stretch following chars by `n`. So `*S2` makes the following
+            | chars twice as wide.
+    `*Tf`   | Insert various formats of the current time. The `f` is the format
+            | specified and can have any valid
+            | [strftime valid format code ](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=strftime%20format%20specifiers)
+            | (drop the `%` in front of the code). So, `*TA` would print
+            | `Monday` (assuming today is Monday) because the `A` specifier
+            | is "replaced by the locale's full weekday name". You can string
+            | several time commands together to make pretty much any time string
+            | you want - `*TH:*TM` would be the current time as hh:mm.
+    `*Pn`   | Set interchar padding. This is the number of blank pixels between
+            | adjacent chars and defaults to 1. `*P0` runs the letters into
+            | each other and `*P3` makes words look very sparse.
+    `*D`    | Inserts the name of the device this string is attacked to. Handy
+            | for debugging.
+    `*G`    | Inserts  the current ping time to google.com. Also handy
+            | for debugging.  Not used any more.
+    `*Wss`  | Waits for ss seconds . "*W02"=wait for 2 seconds. "*W00"=wait forever
