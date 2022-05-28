@@ -1,7 +1,5 @@
-// Main code for driving the LEDs. Only opens the LED serial port as a standard file so no
-// hardware dependancies.
-
-// Yeay!
+// Main code for driving the LEDs. Only opens the LED serial port
+// as a standard file so no hardware dependencies.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,28 +13,22 @@
 //#include <sys/time.h>
 #include <unistd.h>		// sleep
 
-
 #include "blueled.h"
 
-
 unsigned char dots[ROWS][PADDED_COLS];
-
 int fd;			// File desriptor for the serial port
-
 unsigned char buffer[BUFFER_SIZE];
-
 struct timeval lastSend = { 0,0 };
 
-
 // Clean out any pending bytes in the serial read buffer
-
 void purgeSerial() {
 	int flags = fcntl(fd, F_GETFL, 0);
-	fcntl(fd, F_SETFL, flags | O_NONBLOCK);			// Turn off blocking
+	fcntl(fd, F_SETFL, flags | O_NONBLOCK);	// Turn off blocking
 	char dummy;
-	while( read(fd, &dummy, 1) > 0 );					// Keep reading any pending bytes in the buffer until none left
-	fcntl(fd, F_SETFL, flags );						// Set the flags back to what they were before we went non-blocking
-
+	// Keep reading any pending bytes in the buffer until none left
+	while( read(fd, &dummy, 1) > 0 );
+	// Set the flags back to what they were before we went non-blocking
+	fcntl(fd, F_SETFL, flags );
 }
 
 void D(const char *s) {
