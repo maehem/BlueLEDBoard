@@ -123,8 +123,7 @@ void setupRowDDRbits() {
 // "19.3.2: If SS is configured as an output, the pin is a general output pin which does not affect the SPI system."
 // So we must keep SS output, but can be generally used.
 
-void SPI_MasterInit(void)
-{
+void SPI_MasterInit(void) {
     /* Set MOSI,SCK,SS output */
     DDR_SPI |= (1<<DD_MOSI)|(1<<DD_SCK) | (1<<DD_SS);
 
@@ -190,7 +189,6 @@ inline void SPI_MasterTransmit(char cData) {
 
 
 // Set a dot directly in the SPI buffer - displayed immedeately on next refresh pass
-
 void setDot( int row, int col ) {
   spiBuffer[ ( row * ROW_BYTES ) + ( col / 8 ) ] |= 1 << ( col & 7 ) ;
 }
@@ -204,7 +202,6 @@ void clearDots() {
 }
 
 volatile uint8_t spi=0;
-
 uint8_t isr_row = ROWS;  // Row to display on next update
 
 uint16_t spiBufferPtr = PADDED_COLS * ROWS;      // Where are we in the buffer - we will stream one row of bytes on each cycle
@@ -225,9 +222,7 @@ uint16_t spiBufferPtr = PADDED_COLS * ROWS;      // Where are we in the buffer -
 // http://www.wolframalpha.com/input/?i=%28500+bits%2Frow%29+*+%28+%281%2F8%2C000%2C000%29+s%2Fbit%29+in+us
 // (63us/row SPI) / (10us/byte serial) ~= 6 bytes serial/row SPI
 // We will make the mini buffer much bigger since we have planety of room and the SPI is not 100% fast
-
 unsigned char miniBuffer[BUFFER_SIZE];
-
 
 // Called from timer interrupt to refresh the next row of the LED display
 void refreshRow() {
@@ -257,10 +252,9 @@ void refreshRow() {
                                               // indirect addressing faster in AVR), also works becuase
                                               // first bit sent gets shifted to rightmost dot on display.
 
-      while(!(SPSR & (1<<SPIF))) {             // Waiting for SPI transmit to complete
+      while(!(SPSR & (1<<SPIF))) {            // Waiting for SPI transmit to complete
 
-                                               // Interrupts are off, so we need to keep checking to see if any serial bytes came in
-
+                                              // Interrupts are off, so we need to keep checking to see if any serial bytes came in
         while ( UCSR0A & _BV( RXC0 ) ) {      // If any serial chars are available.
           unsigned char c = UDR0;
           *(miniBufferPtr++) = c;             // Save it quickly in the minibuffer for later.
@@ -268,17 +262,17 @@ void refreshRow() {
      }
   }
 
-  // note that spiBufferPtr will naturally point to the next row here, and keeps on decrementing though the full buffer acorss all rows
-
+  // note that spiBufferPtr will naturally point to the next row here, 
+  // and keeps on decrementing though the full buffer acorss all rows
 	// turn on the row of LEDs... (also sets clock and data low)
-
 	SETROWBITS( --isr_row );
 
-  // now that row of LEDs is back on, we have time to drain any chars that came into the mini buffer while we were squirting
+  // now that row of LEDs is back on, we have time to drain any chars 
+  // that came into the mini buffer while we were squirting.
 
-  // Note that interrupts are still off here and we can't turn them back on becuase the new incoming bytes could scramble the
-  // ones we are dumping from the mini buffer
-
+  // Note that interrupts are still off here and we can't turn them back 
+  // on becuase the new incoming bytes could scramble the ones we are 
+  // dumping from the mini buffer.
   uint8_t *miniBufferReaderPtr = miniBuffer;
 
   while (miniBufferReaderPtr<miniBufferPtr) {
@@ -302,9 +296,9 @@ void refreshRow() {
   // and if we clear the Serial buffer then there should not be an ISP when we reenable interrupts after the row is done.
 
   // A USART Receive Complete interrupt will be
-  // generated only if the RXCIEn bit is written to one, the Global Interrupt Flag in SREG is written to one and the
-  // RXCn bit in UCSRnA is set.
-
+  // generated only if the RXCIEn bit is written to one, the Global Interrupt Flag 
+  // in SREG is written to one and the RXCn bit in UCSRnA is set.
+  
   if ( isr_row == 0 ) {     // Did we scan out all the rows?
     // TODO: have free running spiBuffer thta only gets reset on vertical retrace
 		//spiBufferPtr = BUFFER_SIZE;    // Start over at the end of the buffer
@@ -440,7 +434,7 @@ void loop() {
       delay(50);
     }
 
-    for( int c=0; c<1000; c++ ) {     // How many cross hatches?
+    for( int c=0; c<10; c++ ) {     // How many cross hatches?
       // Cross hatch left
     //while (1) {
       SYNC();
