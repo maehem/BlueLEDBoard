@@ -31,11 +31,11 @@ void purgeSerial() {
 	fcntl(fd, F_SETFL, flags );
 }
 
-void D(const char *s) {
-	printf(s);
-}
+//void D(const char *s) {
+//	printf(s);
+//}
 // comment above, uncomment below for production.
-//#define D(x)
+#define D(x)
 
 unsigned int lag=1;             // Number of syncs between scrolling steps
 unsigned int wait=0;			// number of seconds to wait between updates
@@ -537,7 +537,7 @@ int main(int argc, char **argv) {
 
 	fd = open(argv[1] , O_RDWR );
 
-	printf("opened..\r\n");
+	D("opened..\r\n");
 
 	if (fd == -1 ) {
 		printf("failed to open serial device %s\r\n", argv[1]);
