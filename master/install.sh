@@ -60,18 +60,19 @@ if [ ! -e /etc/blueled ]; then
   mkdir /etc/blueled
 fi
 
+# Install copies these no matter what. They might have changed.
 # Old default.  Depricated.
-if [ ! -e /etc/blueled/defaultmessage.txt ]; then
+#if [ ! -e /etc/blueled/defaultmessage.txt ]; then
     cp defaultmessage.txt /etc/blueled/
-fi
+#fi
 # New Default
-if [ ! -e /etc/blueled/messages ]; then
+#if [ ! -e /etc/blueled/messages ]; then
     cp -r messages /etc/blueled/
-fi
+#fi
 
-if [ ! -e /etc/blueled/defaultfont.txt ]; then
+#if [ ! -e /etc/blueled/defaultfont.txt ]; then
     cp defaultfont.txt /etc/blueled/
-fi
+#fi
 
 #copy the serive unit files to the right place
 sudo cp blueled.service $(pkg-config systemd --variable=systemdsystemunitdir)

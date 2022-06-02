@@ -34,7 +34,7 @@ fi
 #fi
 # New message set up.
 if [ ! -e /tmp/blueled/$1/message.txt ]; then
-    cp /etc/blueled/messages/$1/message.txt /tmp/blueled/$1/message.txt
+    cp /etc/blueled/messages/$1.txt /tmp/blueled/$1/message.txt
 fi
 
 # The USB device must be the proper baud rate ( 1MHz ).
