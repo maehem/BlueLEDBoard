@@ -74,6 +74,8 @@ fi
     cp defaultfont.txt /etc/blueled/
 #fi
 
+# probably don't need 'sudo' below as we are already root?
+
 #copy the serive unit files to the right place
 sudo cp blueled.service $(pkg-config systemd --variable=systemdsystemunitdir)
 sudo cp checkusbstick.service $(pkg-config systemd --variable=systemdsystemunitdir)
@@ -89,7 +91,7 @@ sudo systemctl enable blueled.service
 sudo systemctl enable checkusbstick.timer
 #sudo systemctl enable grabdropbox.timer
 
-
+# re-running installer won't update list. You need to update by hand.
 if [ ! -e /etc/blueled/portlist ]; then
    # Assumes all ports are in /dev/ttyUSB?. Might not be true if you are using different hardware than the normal USB serial ocypuses.
    for f in /dev/ttyUSB?; do
